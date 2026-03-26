@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bebo 💖</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@300;400;600&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff85a2;
+            --soft-pink: #fce4ec;
+            --deep-rose: #ff4d6d;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --text-color: #4a4a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffe1e9 50%, #f3e5f5 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            perspective: 1500px;
+        }
+
+        /* Floating Background Elements */
+        .bg-decor {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--primary-pink);
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Interaction Prompt */
+        .instruction {
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            color: var(--deep-rose);
+            font-weight: 600;
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* The Envelope System */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-10px);
+        }
+
+        .envelope {
+            position: relative;
+            width: 350px;
+            height: 230px;
+            background: #fff;
+            box-shadow: 0 15px 35px rgba(255, 133, 162, 0.3);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            z-index: 1;
+        }
+
+        /* Flap of the envelope */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            border-top: 130px solid #ffb3c1;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Front faces of the envelope */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 3;
+            width: 0;
+            height: 0;
+            border-left: 175px solid #ffccd5;
+            border-right: 175px solid #ffccd5;
+            border-bottom: 115px solid #ff85a2;
+            bottom: 0;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        /* Heart Seal */
+        .heart-seal {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            font-size: 40px;
+            transition: 0.5s ease;
+        }
+
+        /* When Open */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .heart-seal {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-50px);
+        }
+
+        /* The Letter Pop-up */
+        .letter-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            z-index: 100;
+            overflow-y: auto;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-pink) transparent;
+        }
+
+        .letter-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-container::-webkit-scrollbar-thumb {
+            background-color: var(--primary-pink);
+            border-radius: 10px;
+        }
+
+        .letter-container.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .handwritten-content {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            color: #333;
+            text-align: left;
+            background-image: linear-gradient(rgba(200, 200, 200, 0.1) 1px, transparent 1px);
+            background-size: 100% 1.5em;
+        }
+
+        .letter-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: var(--deep-rose);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .memory-highlight {
+            color: #d81b60;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 10px 25px;
+            background: var(--deep-rose);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #c2185b;
+            transform: scale(1.05);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .envelope { width: 280px; height: 190px; }
+            .envelope::before { border-left-width: 140px; border-right-width: 140px; border-top-width: 100px; }
+            .envelope::after { border-left-width: 140px; border-right-width: 140px; border-bottom-width: 95px; }
+            .handwritten-content { font-size: 1.3rem; }
+            .letter-container { padding: 25px; }
+        }
+
+        /* Overlay Background */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            display: none;
+            z-index: 90;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-decor" id="bgDecor"></div>
+
+    <div class="instruction">Tap to open bebo🙈😘✨</div>
+
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope"></div>
+        <div class="heart-seal">💖</div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="letter-container" id="letterContainer">
+        <div class="letter-header">Happy Birthday Bebo 💖😘🎉🥂</div>
+        <div class="handwritten-content">
+            Today is special because it gave me you and honestly I still feel so lucky that you’re in my life. This is your first birthday after we met and it means more to me than I can explain.<br><br>
+
+            I still remember <span class="memory-highlight">4th June</span> so clearly. The first time I saw you everything just went quiet for a moment. It was just you, you looked so beautiful that I literally forgot how to act.<br>
+            That day brownie with ice cream going shopping and the fact that you came even when you weren’t well just because I was waiting that meant so much to me 🥹🫂<br><br>
+
+            And on <span class="memory-highlight">6 June ISKON</span>. That moment when I put that anklet on your feet and quietly prayed to Kanha Ji to protect you from every evil eye. I don’t think I’ll ever forget that 🧿💗<br><br>
+
+            Then <span class="memory-highlight">7th November</span>, the day you said YES to my proposal for our relationship. That day changed something in me forever 😭😭💗🤞🏻🧿<br><br>
+
+            The first time I held your hand it didn’t feel real and when I hugged you... your warmth, your scent 🫠🫠🫠 that comfort I swear it felt like home. Some feelings are just too real to explain in words.<br><br>
+
+            We’ve been through a lot but we came together. I feel truly blessed to have you even though I’m not there with you Bebo today I wish i were with you sweetheart. And celebrating your pre birthday seeing you smile that made me really happy like really really happy that i made you smile legit love you so much Bebo bht zada zor se 😭😭😭💗💗💗😘😘😘<br><br>
+
+            I just want you to achieve everything you dreamt of. I believe in you so much especially your <span class="memory-highlight">UPSC</span> 🧿🤞🏻 journey. You’re going to make it, I know it, and no matter what happens I’ll always be there for you in your good days and your tough ones 🫂🫂🫂🧿🧿🤞🏻🤞🏻🤞🏻<br><br>
+
+            I may not be perfect but one thing I promise is I’ll always try to keep you happy to see that smile on your face 🫠🫠 the best view I’ve ever seen is you when you smile haeee 🫠🫠🫠🫠😘 and I'll improve myself day by day. Because your happiness is everything to me Bebo 🫂<br><br>
+
+            I’m all yours Always 😘😘😘<br><br>
+
+            I love you for everything you are and I know I’ll keep loving you more with time and I really can’t wait for the day when this distance finally ends 😁🫂🫠😘💗🧿<br><br>
+
+            Happy Birthday again my princess 🎂✨🎉😘<br>
+            I love you truly, deeply, endlessly ❤️💗😘
+        </div>
+        <button class="close-btn" id="closeBtn"> I LOVE YOU BEBO ❤️</button>
+    </div>
+
+    <script>
+        // Generate Floating Hearts
+        const bgDecor = document.getElementById('bgDecor');
+        const heartIcons = ['💖', '💗', '💓', '🌸', '✨', '🎂'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 5 + 10 + 's';
+            bgDecor.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 15000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // Interaction Logic
+        const wrapper = document.getElementById('envelopeWrapper');
+        const letter = document.getElementById('letterContainer');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('closeBtn');
+
+        wrapper.addEventListener('click', () => {
+            wrapper.classList.add('open');
+            
+            setTimeout(() => {
+                overlay.style.display = 'block';
+                letter.classList.add('show');
+            }, 800);
+        });
+
+        closeBtn.addEventListener('click', () => {
+            letter.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                wrapper.classList.remove('open');
+            }, 400);
+        });
+
+        // Add music logic here if you have a file
+        /* 
+        const music = new Audio('your-song.mp3');
+        wrapper.addEventListener('click', () => { music.play(); });
+        */
+    </script>
+</body>
+</html>
